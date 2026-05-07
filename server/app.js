@@ -36,6 +36,8 @@ Sentry.init({
 // Server init
 const app = express();
 
+app.use('/api/payment/webhook', express.raw({ type: "application/json" }));
+
 // Middlewares
 app.use(cors({
     origin: "*" 
