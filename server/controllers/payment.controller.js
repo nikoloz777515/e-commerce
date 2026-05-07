@@ -75,17 +75,15 @@ const stripeWebhook = async (req, res, next) => {
         return next(new AppError(`Webhook error: ${err.message}`, 400));
     }
 
-    console.log(event.data.object);
-
-    console.log(event);
-
     if (event.type === "checkout.session.completed") {
         const session = event.data.object;
+
+        if (session.payment_status !== "paid") return res.status(200).json({ received: true });
 
         const payment = await Payment.findOne({ stripeSessionId: session.id });
 
         if (!payment) {
-            return next(new AppError("Payment not found!", 404));
+            return res.status(200).json({ received: true });
         }
 
         payment.status = "succeeded";
@@ -98,13 +96,15 @@ const stripeWebhook = async (req, res, next) => {
     if (event.type === "payment_intent.payment_failed") {
         const paymentIntent = event.data.object;
 
-        const payment = await Payment.findOne({ stripePaymentIntentId: paymentIntent.id });
-        
+        const sessionId = paymentIntent.payment_details?.order_reference;
+        const payment = await Payment.findOne({ stripeSessionId: sessionId });
+
         if (!payment) {
-            return next(new AppError("Payment not found!", 404));
+            return res.status(200).json({ received: true });
         }
 
         payment.status = "failed";
+        payment.stripePaymentIntentId = paymentIntent.id;
         payment.webhookProcessed = true;
 
         await payment.save();
