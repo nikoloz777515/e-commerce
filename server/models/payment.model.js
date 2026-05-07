@@ -35,7 +35,7 @@ const paymentSchema = new mongoose.Schema({
 
     webhookProcessed: {type: Boolean, default: false}
 
-})
+}, { timestamps: true });
 
 const Payment = mongoose.model("Payment", paymentSchema);
 
