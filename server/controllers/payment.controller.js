@@ -75,6 +75,10 @@ const stripeWebhook = async (req, res, next) => {
         return next(new AppError(`Webhook error: ${err.message}`, 400));
     }
 
+    console.log(event.data.object);
+
+    console.log(event);
+
     if (event.type === "checkout.session.completed") {
         const session = event.data.object;
 
