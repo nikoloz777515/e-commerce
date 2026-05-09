@@ -11,9 +11,21 @@ const stripe = require('stripe')(process.env.SECRET_STRIPE_KEY);
 
 // Create session
 const createCheckoutSession = catchAsync(async (req, res, next) => {
-    const { productsIds } = req.body;
+    const { userOrder } = req.body;
 
-    const products = await Product.find({_id: {$in: productsIds} });
+    const productsIds = userOrder.map(p => p.id);
+
+    const obj = userOrder.reduce((acc, cur) => {
+        if (!Number.isInteger(cur.quantity) || cur.quantity <= 0) {
+            return next(new AppError("Incorrect quantity!", 400));
+        }
+
+        acc[cur.id] = cur.quantity;
+
+        return acc;
+    }, {});
+
+    const products = await Product.find({ _id: { $in: productsIds } });
 
     if(products.length == 0) {
         return next(new AppError("Products cant be found", 404));
@@ -30,7 +42,7 @@ const createCheckoutSession = catchAsync(async (req, res, next) => {
 
                 unit_amount: product.universal.price * 100,
             },
-            quantity: 1
+            quantity: obj[product._id.toString()]
         }
     });
 
@@ -47,7 +59,7 @@ const createCheckoutSession = catchAsync(async (req, res, next) => {
         stripeSessionId: session.id,
         stripePaymentIntentId: session.payment_intent,
         totalAmount: products.reduce((accumulator, item) => {
-            return accumulator + item.universal.price;
+            return accumulator + item.universal.price * obj[item._id.toString()];
         }, 0),
         status: "pending"
     });
