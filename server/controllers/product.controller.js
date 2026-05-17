@@ -43,6 +43,14 @@ const createProduct = catchAsync(async (req, res, next) => {
         return next(new AppError("You cant create new product because this category is disable", 400));
     }
 
+    const images = [];
+
+    for (const file of req.files) {
+        const image = { src: file.filename, alt: "Product image" };
+
+        images.push(image);
+    }
+
     const product = await Product.create({
         universal: {
             title,
@@ -50,7 +58,8 @@ const createProduct = catchAsync(async (req, res, next) => {
             price,
             stock,
             category: categoryId,
-            sellerId: req.user._id
+            sellerId: req.user._id,
+            images
         },
         attributes: req.body.attributes
     });
@@ -90,6 +99,7 @@ const deleteProduct = catchAsync(async (req, res, next) => {
 const editProduct = catchAsync(async (req, res, next) => {
     const { productId } = req.params;
     const { title, description, price, stock } = req.body;
+    const { files } = req;
 
     const product = await Product.findById(productId);
 
@@ -101,6 +111,7 @@ const editProduct = catchAsync(async (req, res, next) => {
         return next(new AppError("You cant edit this product!", 401));
     }
 
+    if (files && files.length > 0) product.universal.images = files.map(file => ({src: file.filename, alt: "Product image"}));
     if (title) product.universal.title = title;
     if (description) product.universal.description = description;
     if (price) product.universal.price = price;

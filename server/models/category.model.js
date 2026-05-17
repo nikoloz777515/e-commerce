@@ -10,16 +10,16 @@ const categorySchema = new mongoose.Schema({
         type: String,
         required: [true, "Description is required!"]
     },
-    // image: {
-    //     src: {
-    //         type: String,
-    //         required: [true, "Image SRC is required!"]
-    //     },
-    //     alt: {
-    //         type: String,
-    //         required: [true, "Image alt is required!"]
-    //     }
-    // },
+    image: {
+        src: {
+            type: String,
+            required: [true, "Image SRC is required!"]
+        },
+        alt: {
+            type: String,
+            required: [true, "Image alt is required!"]
+        }
+    },
     parentCategory: {
         type: String
     },
