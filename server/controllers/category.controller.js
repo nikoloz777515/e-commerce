@@ -26,7 +26,11 @@ const createCategory = catchAsync(async (req, res, next) => {
         return next(new AppError("You cant create new category!", 401));
     }
 
-    const category = await Category.create({ name, description, parentCategory, allowedAttributes });
+    const src = `/images/${req.file.filename}`;
+
+    const image = { src, alt: "User avatar" };
+
+    const category = await Category.create({ name, description, parentCategory, allowedAttributes, image });
 
     res.status(201).json({
         status: "success",
@@ -68,6 +72,7 @@ const editCategory = catchAsync(async (req, res, next) => {
         return next(new AppError("You cant edit this category!", 401));
     }
 
+    if (req.file) category.image.src = req.file.filename;
     if (name) category.name = name;
     if (description) category.description = description;
     if (parentCategory) category.parentCategory = parentCategory;

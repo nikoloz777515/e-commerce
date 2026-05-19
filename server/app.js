@@ -4,6 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const Sentry = require("@sentry/node");
 const cookieParser = require('cookie-parser');
+const path = require("path");
 
 // Our modules
 
@@ -18,6 +19,7 @@ const authRouter = require('./routers/auth.router');
 const categoryRouter = require('./routers/category.router');
 const productRouter = require('./routers/product.router');
 const paymentRouter = require('./routers/payment.router');
+const userRouter = require('./routers/user.router');
 
 // ----------------------------------------------------------------------------------------
 
@@ -32,7 +34,6 @@ Sentry.init({
     sendDefaultPii: true,
 });
 
-
 // Server init
 const app = express();
 
@@ -44,6 +45,8 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, "./images")));
 
 // Error handler
 Sentry.setupExpressErrorHandler(app);
@@ -61,6 +64,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
 app.use('/api/payment', paymentRouter);
+app.use("/api/user", userRouter);
 
 // Error handler
 app.use(globalErrorHandler);
