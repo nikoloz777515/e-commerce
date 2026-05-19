@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["user", "admin"],
+        enum: ["user", "admin", "seller"],
         default: "user"
     },
 
@@ -31,6 +31,8 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
+
+userSchema.index({isVerified: 1});
 
 // Middlewares
 userSchema.pre('save', async function() {

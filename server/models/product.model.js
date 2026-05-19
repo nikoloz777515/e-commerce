@@ -50,8 +50,6 @@ const productSchema = new mongoose.Schema({
     timestamps: true
 });
 
-<<<<<<< HEAD
-=======
 productSchema.index({
     "universal.category": 1
 });
@@ -60,7 +58,6 @@ productSchema.index({
     "universal.sellerId": 1
 });
 
->>>>>>> 06dc5c6 (Added multer in project, indexing and user controllers / routes)
 const Product = mongoose.model("Product", productSchema);
 
 module.exports = Product;
