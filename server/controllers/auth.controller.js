@@ -18,7 +18,7 @@ const createSendToken = (user, res, statusCode) => {
 
     res.status(statusCode).json({
         status: 'success',
-        message: "Succesfully returned cookie!",
+        message: "Succesfully logged in!",
         data: {
             user
         }
@@ -34,9 +34,9 @@ const signToken = user => {
 
 // Create account
 const signup = catchAsync(async (req, res, next) => {
-    const { fullname, email, password } = req.body;
+    const { fullname, email, password, role } = req.body;
 
-    const user = await User.create({fullname, email, password});
+    const user = await User.create({fullname, email, password, role});
 
     await user.sendVerificationLink();
 
@@ -81,6 +81,19 @@ const signout = catchAsync(async (req, res, next) => {
     });
 });
 
+// AutoLogin
+const getMe = catchAsync(async (req, res, next) => {
+    req.user.password = undefined;
+
+    res.status(200).json({
+        status: "success",
+        message: "User returned successfully!",
+        data: {
+            user: req.user
+        }
+    })
+});
+
 // Controller to verify user email
 const verifyEmail = catchAsync(async (req, res, next) => {
     const { token } = req.query;
@@ -108,4 +121,4 @@ const verifyEmail = catchAsync(async (req, res, next) => {
     res.status(200).send("<h1>Email successfully verified, you can go back!</h1>");
 });
 
-module.exports = { signup, signin, signout, verifyEmail };
+module.exports = { signup, signin, signout, getMe, verifyEmail };
