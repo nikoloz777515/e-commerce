@@ -23,7 +23,7 @@ const categoryRouter = require('./routers/category.router');
 const productRouter = require('./routers/product.router');
 const paymentRouter = require('./routers/payment.router');
 const userRouter = require('./routers/user.router');
-const limiter = require('./config/rateLimit.config');
+const { globalLimiter, apiLimiter } = require('./config/rateLimit.config');
 
 // ----------------------------------------------------------------------------------------
 
@@ -41,8 +41,9 @@ Sentry.init({
 // Server init
 const app = express();
 
-// Security headers
-app.use(limiter);
+app.set('trust proxy', 1);
+
+app.use(globalLimiter);
 
 app.use('/api/payment/webhook', express.raw({ type: "application/json" }));
 
@@ -76,6 +77,9 @@ app.get('/health', (req, res) => {
         message: "Server is running!"
     });
 });
+
+
+app.use('/api', apiLimiter);
 
 // Routers
 app.use('/api/auth', authRouter);
