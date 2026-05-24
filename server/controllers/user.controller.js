@@ -91,9 +91,32 @@ const updateUserById = catchAsync(async (req, res, next) => {
     });
 });
 
+const updateUserRole = catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return next(new AppError("Invalid user ID", 400));
+    }
+
+    if (!['user', 'seller', 'admin'].includes(role)) {
+        return next(new AppError("Invalid role type", 400));
+    }
+
+    const user = await User.findByIdAndUpdate(id, { role }, { new: true, runValidators: true });
+    
+    if (!user) return next(new AppError("User not found", 404));
+
+    return res.json({
+        status: "success",
+        data: user,
+    });
+});
+
 module.exports = {
     getUsers,
     getUserById,
     deleteUserById,
     updateUserById,
+    updateUserRole,
 };

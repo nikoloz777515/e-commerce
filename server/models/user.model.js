@@ -46,17 +46,22 @@ userSchema.methods.comparePassword = async function(candidate) {
 };
 
 // Method to send verification link in user email
-userSchema.methods.sendVerificationLink = function() {
-    const token = jwt.sign({ userId: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
+userSchema.methods.sendVerificationLink = async function() { 
+    const token = jwt.sign(
+        { userId: this._id }, 
+        process.env.JWT_SECRET, 
+        { expiresIn: process.env.JWT_EXPIRES }
+    );
 
+  
     const link = `${process.env.SERVER_URL}/api/auth/verify-email?token=${token}`;
 
     const html = `
         <h1>Verification Link</h1>
         <a href="${link}">Click here to verify your account!</a>
-    `
+    `;
 
-    sendMail(this.email, "Verification Link", html);
+    await sendMail(this.email, "Verification Link", html); 
 };
 
 // Model
