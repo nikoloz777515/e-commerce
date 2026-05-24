@@ -21,6 +21,20 @@ const Nav = () => {
                     {
                         user ? (
                             <>
+                                {/* 💡 თუ იუზერი ადმინია, გამოვაჩინოთ Admin Panel-ის ლინკი */}
+                                {user.role === "admin" && (
+                                    <li>
+                                        <NavLink
+                                            to={"/admin"}
+                                            className={({ isActive }) =>
+                                                `rounded-full px-4 py-2 transition ${isActive ? "bg-slate-200 text-slate-900" : "hover:bg-slate-100 hover:text-slate-900"}`
+                                            }
+                                        >
+                                            Admin Panel
+                                        </NavLink>
+                                    </li>
+                                )}
+
                                 <li>
                                     <NavLink
                                         to={"/profile"}

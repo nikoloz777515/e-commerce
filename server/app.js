@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const Sentry = require("@sentry/node");
 const cookieParser = require('cookie-parser');
 const path = require("path");
+const morgan = require('morgan');
 
 // Security modules
 const { sanitize: mongoSanitize } = require('express-mongo-sanitize');
@@ -40,6 +41,7 @@ Sentry.init({
 
 // Server init
 const app = express();
+app.use(morgan('dev'))
 
 // Security headers
 app.use(limiter);

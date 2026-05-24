@@ -20,3 +20,18 @@ export const fetchSignout = async () => {
 export const fetchMe = async () => {
     return await api.get("/auth/me");
 }
+
+// ყველა მომხმარებლის წამოღება მხოლოდ ადმინისთვის
+export const fetchAllUsers = async () => {
+    return await api.get("/user"); 
+};
+
+// მომხმარებლის როლის შეცვლა
+export const fetchUpdateUserRole = async (userId, role) => {
+    return await api.patch(`/user/${userId}/role`, { role });
+};
+
+// მომხმარებლის წაშლა
+export const fetchDeleteUser = async (userId) => {
+    return await api.delete(`/user/${userId}`);
+};

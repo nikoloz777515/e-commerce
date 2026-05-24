@@ -1,9 +1,7 @@
 const nodemailer = require("nodemailer");
-const dotenv = require("dotenv");
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, "../.env") });
 
-dotenv.config();
-
-// Create transporter
 const transporter = nodemailer.createTransport({
     host: "sandbox.smtp.mailtrap.io",
     port: 2525,
@@ -13,13 +11,20 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Create function to send verification link in user email
-const sendMail = (to, subject, html) => {
-    transporter.sendMail({
-        to,
-        subject,
-        html
-    })
+
+const sendMail = async (to, subject, html) => {
+    try {
+        
+        await transporter.sendMail({
+            from: '"E-Commerce App" <no-reply@ecommerce.com>', 
+            to,
+            subject,
+            html
+        });
+        console.log(`Email sent successfully to ${to}`);
+    } catch (error) {
+        console.error("Error sending email:", error);
+    }
 };
 
 module.exports = sendMail;

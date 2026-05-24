@@ -11,6 +11,13 @@ const Register = () => {
     });
 
     const { register } = useAuth();
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+       
+        await register(formData); 
+      
+        resetForm(); 
+    };
 
     return (
         <section className="mx-auto max-w-md rounded-4xl border border-slate-200 bg-white p-8 shadow-2xl shadow-slate-300/30 sm:p-10">

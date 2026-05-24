@@ -18,22 +18,28 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Useeffect to auto login
+   
     useEffect(() => {
-        const getMe = async () => {
-            try {
-                const res = await fetchMe();
-
+    const getMe = async () => {
+        try {
+            const res = await fetchMe();
+            
+          
+            if (res?.data?.data?.user) {
                 setUser(res.data.data.user);
-                setLoading(false);
-            } catch (err) {
-                setLoading(false);
-                console.log(err);
+            } else {
+                setUser(null);
             }
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            setUser(null); 
+            console.log(err);
         }
+    }
 
-        getMe();
-    }, [navigate]);
+    getMe();
+}, []);
 
     // Function to register new user
     const register = async (data) => {
@@ -43,7 +49,7 @@ export const AuthProvider = ({ children }) => {
             navigate("/login");
             toast.success(res.data.message);
         } catch (err) {
-            toast.error(err.response.data.message);
+            toast.error(err.response?.data?.message || "რეგისტრაციისას დაფიქსირდა შეცდომა");
         }
     }
 
