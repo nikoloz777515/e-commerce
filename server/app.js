@@ -82,6 +82,8 @@ app.use("/api/user", userRouter);
 // Error handler
 app.use(globalErrorHandler);
 
+console.log("hello world");
+
 // Connect DB
 connectDB();
 
