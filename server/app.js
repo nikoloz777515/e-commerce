@@ -6,9 +6,6 @@ const Sentry = require("@sentry/node");
 const cookieParser = require('cookie-parser');
 const path = require("path");
 
-// Security modules
-const { sanitize: mongoSanitize } = require('express-mongo-sanitize');
-
 // Our modules
 
 // Configs
@@ -24,6 +21,9 @@ const productRouter = require('./routers/product.router');
 const paymentRouter = require('./routers/payment.router');
 const userRouter = require('./routers/user.router');
 const limiter = require('./config/rateLimit.config');
+
+// Security middlewares
+const mongoSanitizeMiddleware = require('./middlewares/security.middleware');
 
 // ----------------------------------------------------------------------------------------
 
@@ -53,16 +53,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
-
-// express-mongo-sanitize v2 assigns req.query which is read-only in Express v5;
-// _sanitize mutates in-place so skipping the reassignment for query is safe.
-app.use((req, res, next) => {
-    const opts = { replaceWith: '_' };
-    if (req.body) req.body = mongoSanitize(req.body, opts);
-    if (req.params) req.params = mongoSanitize(req.params, opts);
-    if (req.query) mongoSanitize(req.query, opts);
-    next();
-});
+app.use(mongoSanitizeMiddleware);
 
 app.use(express.static(path.join(__dirname, "./images")));
 
