@@ -6,43 +6,43 @@ const AdminPanel = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // იუზერების ჩატვირთვა გვერდის გახსნისას
+    
     useEffect(() => {
         const getUsers = async () => {
             try {
                 const res = await fetchAllUsers();
-                // 💡 შენი ბექენდის მიხედვით, მასივი არის პირდაპირ res.data.data-ში
+                
                 setUsers(res.data.data || []); 
                 setLoading(false);
             } catch (err) {
-                toast.error("მონაცემების წამოღება ვერ მოხერხდა");
+                toast.error("couldn't take users data");
                 setLoading(false);
             }
         };
         getUsers();
     }, []);
 
-    // როლის შეცვლის ფუნქცია
+    //role change function
     const handleRoleChange = async (userId, newRole) => {
         try {
             await fetchUpdateUserRole(userId, newRole);
-            toast.success("როლი წარმატებით შეიცვალა!");
+            toast.success("role changed sucesfully");
             setUsers(users.map(u => u._id === userId ? { ...u, role: newRole } : u));
         } catch (err) {
-            toast.error("როლის შეცვლა ვერ მოხერხდა");
+            toast.error("role couldn't changed");
         }
     };
 
-    // იუზერის წაშლის ფუნქცია
+    //user delete function
     const handleDelete = async (userId) => {
-        if (!window.confirm("ნამდვილად გსურთ მომხმარებლის წაშლა?")) return;
+        if (!window.confirm("are you sure to delete a user?")) return;
         
         try {
             await fetchDeleteUser(userId);
-            toast.success("მომხმარებელი წაიშალა");
+            toast.success("user deleted");
             setUsers(users.filter(u => u._id !== userId));
         } catch (err) {
-            toast.error("წაშლა ვერ მოხერხდა");
+            toast.error("user couldn't deleted");
         }
     };
 
@@ -53,7 +53,7 @@ const AdminPanel = () => {
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-slate-800">Admin Panel — Users</h2>
                 <span className="bg-slate-100 text-slate-700 px-4 py-1.5 rounded-full text-sm font-medium">
-                    სულ: {users.length} იუზერი
+                    all: {users.length} users
                 </span>
             </div>
 

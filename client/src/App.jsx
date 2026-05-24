@@ -1,5 +1,5 @@
 // React Router tools
-import { Route, Routes, Navigate } from "react-router"; // 💡 დავამატეთ Navigate
+import { Route, Routes, Navigate } from "react-router";
 
 // Pages
 import Register from "./pages/Register";
@@ -10,7 +10,7 @@ import AdminPanel from "./pages/AdminPanel";
 
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
-// 💡 AdminRoute-ის იმპორტი ამოვშალეთ, რადგან აღარ გვჭირდება
+
 
 import Nav from "./components/Nav";
 import Loading from "./components/Loading";
@@ -36,7 +36,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           
-          {/* 🔒 უსაფრთხო ადმინ როუტი: თუ ადმინია შევიდეს, თუ არა - გადავიდეს მთავარზე */}
+          
           <Route 
             path="/admin" 
             element={user && user.role === "admin" ? <AdminPanel /> : <Navigate to="/" replace />} 

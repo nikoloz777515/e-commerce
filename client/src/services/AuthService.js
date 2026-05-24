@@ -21,17 +21,17 @@ export const fetchMe = async () => {
     return await api.get("/auth/me");
 }
 
-// ყველა მომხმარებლის წამოღება მხოლოდ ადმინისთვის
+//get alluser
 export const fetchAllUsers = async () => {
     return await api.get("/user"); 
 };
 
-// მომხმარებლის როლის შეცვლა
+// cnage user role
 export const fetchUpdateUserRole = async (userId, role) => {
     return await api.patch(`/user/${userId}/role`, { role });
 };
 
-// მომხმარებლის წაშლა
+//user delete
 export const fetchDeleteUser = async (userId) => {
     return await api.delete(`/user/${userId}`);
 };
