@@ -19,7 +19,6 @@ const globalLimiter = rateLimit({
     handler: buildHandler('Too many requests — please try again later.'),
 });
 
-
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 10,
@@ -30,23 +29,19 @@ const authLimiter = rateLimit({
     handler: buildHandler('Too many failed auth attempts — try again in 15 minutes.'),
 });
 
-
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 200,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
-    keyGenerator: userAwareKey,
     handler: buildHandler('API rate limit exceeded — please slow down.'),
 });
-
 
 const uploadLimiter = rateLimit({
     windowMs: 60 * 60 * 1000,
     limit: 30,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
-    keyGenerator: userAwareKey,
     handler: buildHandler('Upload limit reached — wait before uploading more files.'),
 });
 
@@ -55,7 +50,6 @@ const paymentLimiter = rateLimit({
     limit: 20,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
-    keyGenerator: userAwareKey,
     handler: buildHandler('Too many payment requests — please try again later.'),
 });
 

@@ -23,7 +23,7 @@ const createSendToken = (user, res, statusCode) => {
             user
         }
     });
-}
+};
 
 // Sign token
 const signToken = user => {

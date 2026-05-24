@@ -1,11 +1,14 @@
 // 3rd Modules
 const express = require('express');
-const cors = require('cors');
 const dotenv = require('dotenv');
-const Sentry = require("@sentry/node");
 const cookieParser = require('cookie-parser');
-const path = require("path");
+const path = require('path');
+
+// Security and monitoring modules
 const morgan = require('morgan');
+const Sentry = require('@sentry/node');
+const cors = require('cors');
+const helmet = require('helmet');
 
 // Our modules
 
@@ -41,10 +44,11 @@ Sentry.init({
 
 // Server init
 const app = express();
+
+// Logging requests
 app.use(morgan('dev'))
 
-app.set('trust proxy', 1);
-
+// Security
 app.use(globalLimiter);
 
 app.use('/api/payment/webhook', express.raw({ type: "application/json" }));
@@ -54,6 +58,7 @@ app.use(cors({
     origin: process.env.CLIENT_URL,
     credentials: true
 }));
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 app.use(mongoSanitizeMiddleware);
