@@ -28,6 +28,8 @@ const { globalLimiter, apiLimiter } = require('./config/rateLimit.config');
 
 // Security middlewares
 const mongoSanitizeMiddleware = require('./middlewares/security.middleware');
+const reviewRouter = require('./routers/review.router');
+const commentRouter = require('./routers/comment.router');
 
 // ----------------------------------------------------------------------------------------
 
@@ -85,6 +87,9 @@ app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
 app.use('/api/payment', paymentRouter);
 app.use("/api/user", userRouter);
+app.use("/api/review", reviewRouter);
+app.use("/api/comment", commentRouter);
+
 
 // Error handler
 app.use(globalErrorHandler);
