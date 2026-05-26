@@ -9,6 +9,7 @@ const morgan = require('morgan');
 const Sentry = require('@sentry/node');
 const cors = require('cors');
 const helmet = require('helmet');
+const hpp = require("hpp");
 
 // Our modules
 
@@ -50,6 +51,7 @@ app.use(morgan('dev'))
 
 // Security
 app.use(globalLimiter);
+app.use(hpp());
 
 app.use('/api/payment/webhook', express.raw({ type: "application/json" }));
 
