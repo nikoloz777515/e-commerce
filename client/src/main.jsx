@@ -15,12 +15,15 @@ import { ToastContainer } from "react-toastify";
 
 // Contexts
 import { AuthProvider } from './context/AuthContext.jsx';
+import { AdminProvider } from './context/AdminContext.jsx';
 
 createRoot(document.getElementById('root')).render(
     <BrowserRouter>
 		<AuthProvider>
-			<App />
-			<ToastContainer position='bottom-right' />
+			<AdminProvider>
+					<App />
+				<ToastContainer position='bottom-right' />
+			</AdminProvider>
 		</AuthProvider>
 	</BrowserRouter>
 )

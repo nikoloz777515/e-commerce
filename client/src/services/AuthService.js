@@ -21,17 +21,3 @@ export const fetchMe = async () => {
     return await api.get("/auth/me");
 }
 
-//get alluser
-export const fetchAllUsers = async () => {
-    return await api.get("/user"); 
-};
-
-// cnage user role
-export const fetchUpdateUserRole = async (userId, role) => {
-    return await api.patch(`/user/${userId}/role`, { role });
-};
-
-//user delete
-export const fetchDeleteUser = async (userId) => {
-    return await api.delete(`/user/${userId}`);
-};

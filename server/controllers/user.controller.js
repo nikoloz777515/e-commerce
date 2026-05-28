@@ -34,7 +34,6 @@ const getUserById = catchAsync(async (req, res, next) => {
 })
 
 const deleteUserById = catchAsync(async (req, res, next) => {
-
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -45,8 +44,8 @@ const deleteUserById = catchAsync(async (req, res, next) => {
 
     if (!user) return next(new AppError("User not found", 404));
 
-    if (req.user._id.toString() !== user._id.toString()) {
-        return next(new AppError("You are not authorized to update this user", 403));
+    if (req.user.role !== "admin" && req.user._id.toString() !== user._id.toString()) {
+        return next(new AppError("You are not authorized to delete this user", 403));
     }
 
     await User.findByIdAndDelete(id);
@@ -56,7 +55,6 @@ const deleteUserById = catchAsync(async (req, res, next) => {
         message: "User deleted successfully",
     });
 });
-
 const updateUserById = catchAsync(async (req, res, next) => {
 
     const { id } = req.params;
